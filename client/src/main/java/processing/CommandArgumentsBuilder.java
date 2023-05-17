@@ -4,12 +4,12 @@ import commands.ExecuteScriptCommand;
 import commands.ExitCommand;
 import commands.InsertCommand;
 import commands.UpdateCommand;
+import data.CommandArguments;
 import data.Vehicle;
 import mods.AnswerType;
 import mods.ClientRequestType;
 import mods.ExecuteMode;
 import user.Client;
-import utility.CommandArguments;
 import utility.FileHandler;
 
 import java.io.File;

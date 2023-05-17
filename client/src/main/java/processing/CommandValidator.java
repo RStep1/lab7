@@ -1,6 +1,7 @@
 package processing;
 
 import commands.*;
+import data.CommandArguments;
 import exceptions.WrongAmountOfArgumentsException;
 import mods.AnswerType;
 import mods.ExecuteMode;

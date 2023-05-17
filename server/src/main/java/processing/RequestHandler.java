@@ -2,10 +2,10 @@ package processing;
 
 import commands.InsertCommand;
 import commands.UpdateCommand;
+import data.CommandArguments;
 import mods.AnswerType;
 import mods.ExecuteMode;
 import mods.MessageType;
-import utility.CommandArguments;
 import utility.MessageHolder;
 import utility.ServerAnswer;
 

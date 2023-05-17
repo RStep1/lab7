@@ -1,7 +1,7 @@
 package commands;
 
+import data.CommandArguments;
 import processing.BufferedDataBase;
-import utility.CommandArguments;
 
 /**
  * Acts as a wrapper for the 'remove greater key' command.

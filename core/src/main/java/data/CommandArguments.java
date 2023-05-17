@@ -1,4 +1,4 @@
-package utility;
+package data;
 
 import mods.ClientRequestType;
 import mods.ExecuteMode;

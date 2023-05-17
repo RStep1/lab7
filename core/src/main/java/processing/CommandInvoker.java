@@ -1,7 +1,7 @@
 package processing;
 
 import commands.*;
-import utility.CommandArguments;
+import data.CommandArguments;
 import utility.FileHandler;
 
 import java.util.HashMap;

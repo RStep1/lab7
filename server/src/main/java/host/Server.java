@@ -1,9 +1,9 @@
 package host;
 
 import commands.SaveCommand;
+import data.CommandArguments;
 import processing.NBChannelController;
 import processing.RequestHandler;
-import utility.CommandArguments;
 import utility.ServerAnswer;
 
 import java.io.IOException;

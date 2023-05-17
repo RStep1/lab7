@@ -1,5 +1,6 @@
 package processing;
 
+import data.CommandArguments;
 import data.FuelType;
 import data.Vehicle;
 

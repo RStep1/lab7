@@ -1,10 +1,10 @@
 package user;
 
 import commands.ExitCommand;
+import data.CommandArguments;
 import mods.*;
 import processing.CommandArgumentsBuilder;
 import processing.Console;
-import utility.CommandArguments;
 import utility.MessageHolder;
 import utility.ServerAnswer;
 import utility.FileHandler;

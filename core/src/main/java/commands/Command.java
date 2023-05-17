@@ -1,6 +1,6 @@
 package commands;
 
-import utility.CommandArguments;
+import data.CommandArguments;
 
 /**
  * Interface for all commands.

@@ -1,8 +1,8 @@
 package commands;
 
+import data.CommandArguments;
 import data.Vehicle;
 import processing.BufferedDataBase;
-import utility.CommandArguments;
 
 /**
  * Acts as a wrapper for the 'insert' command.

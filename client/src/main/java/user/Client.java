@@ -1,13 +1,13 @@
 package user;
 
 import processing.NBChannelController;
-
-import utility.CommandArguments;
 import utility.ServerAnswer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
+
+import data.CommandArguments;
 
 public class Client {
     private static SocketChannel clientSocketChannel;
