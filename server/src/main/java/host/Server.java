@@ -2,6 +2,7 @@ package host;
 
 import commands.SaveCommand;
 import data.CommandArguments;
+import processing.ClientHandler;
 import processing.RequestHandler;
 
 import java.io.IOException;
@@ -38,7 +39,10 @@ public class Server {
             while (true) {
                 Socket client = serverSocket.accept();
                 System.out.println("New client connected: " + client.getInetAddress());
-            
+                
+                ClientHandler clientHandler = new ClientHandler(client, requestHandler);
+                Thread clientHandlerThread = new Thread(clientHandler);
+                clientHandlerThread.start();
             }
         } catch (IOException e) {
             e.printStackTrace();
