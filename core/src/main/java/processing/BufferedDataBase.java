@@ -381,6 +381,18 @@ public class BufferedDataBase {
         return true;
     }
 
+    public boolean register(CommandArguments commandArguments) {
+
+
+        return true;
+    }
+
+    public boolean login(CommandArguments commandArguments) {
+        
+
+        return true;
+    }
+
     public String getCollectionType() {
         return dataBase.getClass().getName();
     }

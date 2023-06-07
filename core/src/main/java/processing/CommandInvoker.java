@@ -21,7 +21,8 @@ public class CommandInvoker {
                           Command clearCommand, Command saveCommand, Command executeScriptCommand,
                           Command exitCommand, Command removeGreaterCommand, Command removeLowerCommand,
                           Command removeGreaterKeyCommand, Command removeAllByEnginePowerCommand,
-                          Command countByFuelTypeCommand, Command filterLessThanFuelTypeCommand) {
+                          Command countByFuelTypeCommand, Command filterLessThanFuelTypeCommand,
+                          Command registerCommand, Command loginCommand) {
         commandMap.put(HelpCommand.getName(), helpCommand);
         commandMap.put(InfoCommand.getName(), infoCommand);
         commandMap.put(ShowCommand.getName(), showCommand);
@@ -38,6 +39,8 @@ public class CommandInvoker {
         commandMap.put(RemoveAllByEnginePowerCommand.getName(), removeAllByEnginePowerCommand);
         commandMap.put(CountByFuelTypeCommand.getName(), countByFuelTypeCommand);
         commandMap.put(FilterLessThanFuelTypeCommand.getName(), filterLessThanFuelTypeCommand);
+        commandMap.put(RegisterCommand.getName(), registerCommand);
+        commandMap.put(LoginCommand.getName(), loginCommand);
 
         setReferenceFile();
     }
