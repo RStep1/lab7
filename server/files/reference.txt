@@ -7,6 +7,7 @@ insert <key> <element>: adds a new element with the given key
 update <id> <element>: updates the value of the collection element whose id is equal to the given one
 remove_greater <distanceTravelled>: removes from the collection all elements whose distanceTraveled field value is greater than the specified value
 remove_lower <distanceTravelled>: removes from the collection all elements whose distanceTraveled field value is less than the specified value
+login<login> <password>: user authorization
 help: displays help for available commands
 exit: terminates the program without saving to a file
 filter_less_than_fuel_type <fuelType>: displays elements whose fuelType field value is less than the given one
@@ -14,4 +15,5 @@ count_by_fuel_type <fuelType>: displays the number of elements whose fuelType fi
 remove_all_by_engine_power <enginePower>: removes from the collection all elements whose enginePower field value is equivalent to the given one
 remove_key <key>: removes an element from the collection by its key
 info: displays information about the collection (type, initialization date, number of elements, last saved date))
+register<login> <password>: allows a new user to register
 

@@ -10,7 +10,9 @@
 
     import commands.*;
     import host.Server;
-    import utility.FileHandler;
+import utility.DatabaseHandler;
+import utility.DatabaseUserManager;
+import utility.FileHandler;
     import utility.MessageHolder;
     import utility.ScriptGenerator;
 
@@ -24,16 +26,19 @@
             // FileHandler.clearFile(FileType.TEST_SCRIPT);
             // ScriptGenerator scriptGenerator = new ScriptGenerator(50000);
             // scriptGenerator.generateInserts();
-            
+            String databaseUsername = "s368737";
             String[] hostAndPort = args[0].split("\\s+");
             String host = hostAndPort[0];
             int port = Integer.parseInt(args[1]);
+            String password = args[2];
 
             if (!FileHandler.checkEnvVariable()) {
                 Console.printUserErrors();
                 MessageHolder.clearMessages(MessageType.USER_ERROR);
                 return;
             }
+            DatabaseHandler databaseHandler = new DatabaseHandler("jdbc:postgresql://" + host + ":5432/studs", databaseUsername, password);
+            DatabaseUserManager databaseUserManager = new DatabaseUserManager(databaseHandler);
             BufferedDataBase bufferedDataBase = new BufferedDataBase();
             CommandInvoker invoker = new CommandInvoker(new HelpCommand(bufferedDataBase),
                     new InfoCommand(bufferedDataBase), new ShowCommand(bufferedDataBase),
@@ -45,7 +50,9 @@
                     new RemoveGreaterKeyCommand(bufferedDataBase),
                     new RemoveAllByEnginePowerCommand(bufferedDataBase),
                     new CountByFuelTypeCommand(bufferedDataBase),
-                    new FilterLessThanFuelTypeCommand(bufferedDataBase));
+                    new FilterLessThanFuelTypeCommand(bufferedDataBase),
+                    new RegisterCommand(bufferedDataBase),
+                    new LoginCommand(bufferedDataBase));
             RequestHandler requestHandler = new RequestHandler(invoker);
             Server server = new Server(requestHandler, host, port);
             bufferedDataBase.setCommandInvoker(invoker);
