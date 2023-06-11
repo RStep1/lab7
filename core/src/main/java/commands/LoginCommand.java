@@ -21,7 +21,7 @@ public class LoginCommand implements Command {
 
     @Override
     public boolean execute(CommandArguments commandArguments) {
-        return bufferedDataBase.insert(commandArguments);
+        return bufferedDataBase.login(commandArguments);
     }
 
     public static String getName() {

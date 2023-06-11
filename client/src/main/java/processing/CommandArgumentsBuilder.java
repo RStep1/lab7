@@ -52,6 +52,7 @@ public class CommandArgumentsBuilder {
         if (nextCommand.equals(RegisterCommand.getName()) || nextCommand.equals(LoginCommand.getName())) {
             user = Console.enterUsernameAndPassword(nextLine);
         }
+        System.out.println("User: " + user);
         CommandArguments newCommandArguments = 
                         new CommandArguments(nextCommand, arguments, extraArguments,
                                             ClientRequestType.COMMAND_EXECUTION, executeMode, user);

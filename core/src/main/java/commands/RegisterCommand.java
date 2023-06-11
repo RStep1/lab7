@@ -21,7 +21,7 @@ public class RegisterCommand implements Command {
 
     @Override
     public boolean execute(CommandArguments commandArguments) {
-        return bufferedDataBase.insert(commandArguments);
+        return bufferedDataBase.register(commandArguments);
     }
 
     public static String getName() {
