@@ -14,14 +14,16 @@ public class CommandArguments implements Serializable {
     private ClientRequestType clientRequestType;
     private final ExecuteMode executeMode;
     private File scriptFile;
+    private User user;
 
     public CommandArguments(String commandName, String[] arguments, String[] extraArguments,
-                            ClientRequestType clientRequestType, ExecuteMode executeMode) {
+                            ClientRequestType clientRequestType, ExecuteMode executeMode, User user) {
         this.commandName = commandName;
         this.arguments = arguments;
         this.extraArguments = extraArguments;
         this.clientRequestType = clientRequestType;
         this.executeMode = executeMode;
+        this.user = user;
     }
 
     public String getCommandName() {
@@ -46,6 +48,10 @@ public class CommandArguments implements Serializable {
 
     public File getScriptFile() {
         return scriptFile;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public void setClientRequestType(ClientRequestType clientRequestType) {
