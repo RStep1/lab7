@@ -2,6 +2,7 @@ package processing;
 
 import commands.*;
 import data.CommandArguments;
+import data.User;
 import exceptions.WrongAmountOfArgumentsException;
 import mods.AnswerType;
 import mods.ExecuteMode;
@@ -136,6 +137,14 @@ public class CommandValidator {
         return true;
     }
 
+    private boolean validateUser(CommandArguments commandArguments) {
+        String[] arguments = commandArguments.getArguments();
+        if (!checkNumberOfArguments(commandArguments, 2)) {
+            return false;
+        }
+        return true;
+    }
+
     public boolean validate(CommandArguments commandArguments) {
         if (commandArguments == null)
             return false;
@@ -154,6 +163,7 @@ public class CommandValidator {
             case "remove_greater", "remove_lower" -> isCorrect = validateDistanceTravelled(commandArguments);
             case "remove_all_by_engine_power" -> isCorrect = validateEnginePower(commandArguments);
             case "count_by_fuel_type", "filter_less_than_fuel_type" -> isCorrect = validateFuelType(commandArguments);
+            case "register", "login" -> isCorrect = validateUser(commandArguments);
             default -> {
                 MessageHolder.putMessage(String.format(
                         "'%s': No such command", commandArguments.getCommandName()), MessageType.USER_ERROR);
