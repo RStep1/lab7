@@ -42,8 +42,6 @@ import utility.FileHandler;
             DatabaseUserManager databaseUserManager = new DatabaseUserManager(databaseHandler);
             DatabaseCollectionManager databaseCollectionManager = new DatabaseCollectionManager(databaseHandler);
             BufferedDataBase bufferedDataBase = new BufferedDataBase(databaseHandler, databaseUserManager, databaseCollectionManager);
-            // BufferedDataBase bufferedDataBase = new BufferedDataBase(null, null, null);
-
             CommandInvoker invoker = new CommandInvoker(new HelpCommand(bufferedDataBase),
                     new InfoCommand(bufferedDataBase), new ShowCommand(bufferedDataBase),
                     new InsertCommand(bufferedDataBase), new UpdateCommand(bufferedDataBase),

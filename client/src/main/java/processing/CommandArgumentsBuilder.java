@@ -22,6 +22,7 @@ import java.util.*;
 public class CommandArgumentsBuilder {
     public final Scanner scanner;
     private final AnswerType answerType;
+    private User user;
 
     public CommandArgumentsBuilder(Scanner scanner, AnswerType answerType) {
         this.scanner = scanner;
@@ -44,13 +45,12 @@ public class CommandArgumentsBuilder {
     private ArrayList<CommandArguments> commandProcessing(String nextLine, ExecuteMode executeMode, File currentScriptFile) {
         if (nextLine.trim().equals(""))
             return new ArrayList<>();
-        User user = null;///////////////
         UserLineSeparator userLineSeparator = new UserLineSeparator(nextLine);
         String nextCommand = userLineSeparator.getCommand();
         String[] arguments = userLineSeparator.getArguments();
         String[] extraArguments = null;
         if (nextCommand.equals(RegisterCommand.getName()) || nextCommand.equals(LoginCommand.getName())) {
-            user = Console.enterUsernameAndPassword(nextLine);
+            user = Console.enterUsernameAndPassword(scanner, nextLine);
         }
         System.out.println("User: " + user);
         CommandArguments newCommandArguments = 

@@ -21,7 +21,7 @@ public class RequestHandler {
     public ServerAnswer processRequest(CommandArguments commandArguments) {
         MessageHolder.clearMessages(MessageType.OUTPUT_INFO);
         MessageHolder.clearMessages(MessageType.USER_ERROR);
-
+        System.out.println(commandArguments.getUser());
         boolean exitStatus = invoker.execute(commandArguments);
 
         ArrayList<String> outputInfo = MessageHolder.getOutputInfo();
