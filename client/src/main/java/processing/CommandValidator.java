@@ -139,7 +139,7 @@ public class CommandValidator {
 
     private boolean validateUser(CommandArguments commandArguments) {
         String[] arguments = commandArguments.getArguments();
-        if (!checkNumberOfArguments(commandArguments, 2)) {
+        if (!checkNumberOfArguments(commandArguments, 0)) {
             return false;
         }
         return true;

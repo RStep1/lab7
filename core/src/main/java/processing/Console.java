@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import commands.LoginCommand;
+import data.User;
+
 /**
  * Designed for input-output information.
  */
@@ -55,6 +58,36 @@ public class Console {
             newValues[index++] = newValue;
         }
         return newValues;
+    }
+
+    public static User enterUsernameAndPassword(String commandName) {
+        String username = "", passwordFirst = "", passwordSecond = "";
+        try (Scanner in = new Scanner(System.in);) {
+            username = enterWhile(in, "Enter username: ", "");
+            if (commandName.equals(LoginCommand.getName())) {
+                passwordFirst = enterWhile(in, "Enter password: ", "");
+            } else {
+                while (true) {
+                    passwordFirst = enterWhile(in, "Enter new password: ", "");
+                    passwordSecond = enterWhile(in, "Enter it again to confirm: ", "");
+                    if (passwordFirst.equals(passwordSecond))
+                        break;
+                    Console.println("Passwrods don't match, please try again.");
+                }
+            }
+        } catch (NoSuchElementException e) {
+            System.exit(0);
+        }
+        return new User(username, passwordFirst);
+    }
+
+    private static String enterWhile(Scanner scanner, String displayMessage, String condition) {
+        String value = "";
+        do {
+            Console.print(displayMessage);
+            value = scanner.nextLine().trim();
+        } while (value.equals(condition));
+        return value;
     }
 
     public static String getHelpMessage() {

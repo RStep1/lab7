@@ -3,8 +3,11 @@ package processing;
 import commands.ExecuteScriptCommand;
 import commands.ExitCommand;
 import commands.InsertCommand;
+import commands.LoginCommand;
+import commands.RegisterCommand;
 import commands.UpdateCommand;
 import data.CommandArguments;
+import data.User;
 import data.Vehicle;
 import mods.AnswerType;
 import mods.ClientRequestType;
@@ -13,6 +16,7 @@ import user.Client;
 import utility.FileHandler;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class CommandArgumentsBuilder {
@@ -40,13 +44,17 @@ public class CommandArgumentsBuilder {
     private ArrayList<CommandArguments> commandProcessing(String nextLine, ExecuteMode executeMode, File currentScriptFile) {
         if (nextLine.trim().equals(""))
             return new ArrayList<>();
+        User user = null;///////////////
         UserLineSeparator userLineSeparator = new UserLineSeparator(nextLine);
         String nextCommand = userLineSeparator.getCommand();
         String[] arguments = userLineSeparator.getArguments();
         String[] extraArguments = null;
+        if (nextCommand.equals(RegisterCommand.getName()) || nextCommand.equals(LoginCommand.getName())) {
+            user = Console.enterUsernameAndPassword(nextLine);
+        }
         CommandArguments newCommandArguments = 
                         new CommandArguments(nextCommand, arguments, extraArguments,
-                                            ClientRequestType.COMMAND_EXECUTION, executeMode);
+                                            ClientRequestType.COMMAND_EXECUTION, executeMode, user);
         newCommandArguments.setScriptFile(currentScriptFile);
         if (nextCommand.equals(ExecuteScriptCommand.getName())) // if it's execute_script command, start script processing
             return scriptProcessing(newCommandArguments);

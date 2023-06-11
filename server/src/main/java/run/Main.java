@@ -10,6 +10,7 @@
 
     import commands.*;
     import host.Server;
+import utility.DatabaseCollectionManager;
 import utility.DatabaseHandler;
 import utility.DatabaseUserManager;
 import utility.FileHandler;
@@ -27,8 +28,8 @@ import utility.FileHandler;
             // ScriptGenerator scriptGenerator = new ScriptGenerator(50000);
             // scriptGenerator.generateInserts();
             String databaseUsername = "s368737";
-            String[] hostAndPort = args[0].split("\\s+");
-            String host = hostAndPort[0];
+            // String[] hostAndPort = args[0].split("\\s+");
+            String host = args[0];
             int port = Integer.parseInt(args[1]);
             String password = args[2];
 
@@ -39,7 +40,10 @@ import utility.FileHandler;
             }
             DatabaseHandler databaseHandler = new DatabaseHandler("jdbc:postgresql://" + host + ":5432/studs", databaseUsername, password);
             DatabaseUserManager databaseUserManager = new DatabaseUserManager(databaseHandler);
-            BufferedDataBase bufferedDataBase = new BufferedDataBase();
+            DatabaseCollectionManager databaseCollectionManager = new DatabaseCollectionManager(databaseHandler);
+            BufferedDataBase bufferedDataBase = new BufferedDataBase(databaseHandler, databaseUserManager, databaseCollectionManager);
+            // BufferedDataBase bufferedDataBase = new BufferedDataBase(null, null, null);
+
             CommandInvoker invoker = new CommandInvoker(new HelpCommand(bufferedDataBase),
                     new InfoCommand(bufferedDataBase), new ShowCommand(bufferedDataBase),
                     new InsertCommand(bufferedDataBase), new UpdateCommand(bufferedDataBase),
