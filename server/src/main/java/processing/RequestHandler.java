@@ -1,5 +1,6 @@
 package processing;
 
+import commands.HelpCommand;
 import commands.InsertCommand;
 import commands.LoginCommand;
 import commands.RegisterCommand;
@@ -26,7 +27,8 @@ public class RequestHandler {
         System.out.println(commandArguments.getUser());
         if (commandArguments.getUser() == null && 
             !(commandArguments.getCommandName().equals(LoginCommand.getName()) || 
-            commandArguments.getCommandName().equals(RegisterCommand.getName()))) {
+            commandArguments.getCommandName().equals(RegisterCommand.getName()) || 
+            commandArguments.getCommandName().equals(HelpCommand.getName()))) {
                 MessageHolder.putMessage("You need to be logged in to run commands", MessageType.USER_ERROR);
             return new ServerAnswer(MessageHolder.getOutputInfo(), MessageHolder.getUserErrors(),
                          false, AnswerType.EXECUTION_RESPONSE);
