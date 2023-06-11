@@ -2,6 +2,7 @@ package processing;
 
 import data.CommandArguments;
 import data.FuelType;
+import data.User;
 import data.Vehicle;
 
 import java.io.File;
@@ -389,14 +390,33 @@ public class BufferedDataBase {
     }
 
     public boolean register(CommandArguments commandArguments) {
-        
-        
-        return true;
+        User user = commandArguments.getUser();
+        if (databaseUserManager.getUserByLogin(user.getLogin()) != null) {
+            MessageHolder.putMessage("User with such login already exists", MessageType.USER_ERROR);
+            return false;
+        }
+        if (!databaseUserManager.insertUser(user)) {
+            MessageHolder.putMessage("", MessageType.USER_ERROR);
+            return false;
+        }
+        MessageHolder.putMessage(String.format("User '%s' successfully registered", user.getLogin()), MessageType.OUTPUT_INFO);
+        return databaseUserManager.insertUser(user);
     }
 
     public boolean login(CommandArguments commandArguments) {
-        
-
+        String login = commandArguments.getUser().getLogin();
+        User selectedUser = databaseUserManager.getUserByLogin(login);
+        if (selectedUser == null) {
+            MessageHolder.putMessage(String.format("User with login '%s' was not found", login), MessageType.USER_ERROR);
+            return false;
+        }
+        String selectedPassword = selectedUser.getPasword();
+        String password = commandArguments.getUser().getPasword();
+        if (!SHA256Hashing.hash(password).equals(selectedPassword)) {
+            MessageHolder.putMessage("Incorrect password", MessageType.USER_ERROR);
+            return false;
+        }
+        MessageHolder.putMessage(String.format("User '%s' successfully logged in", login), MessageType.OUTPUT_INFO);
         return true;
     }
 
