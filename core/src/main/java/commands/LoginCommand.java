@@ -11,7 +11,7 @@ import processing.BufferedDataBase;
 public class LoginCommand implements Command {
     private BufferedDataBase bufferedDataBase;
     private static final String NAME = "login";
-    private static final String ARGUMENTS = "";
+    private static final String ARGUMENTS = "<login> <password>";
     private static final String DESCRIPTION = "user authorization";
     private static final int COUNT_OF_ARGUMENTS = 0;
     private static final int COUNT_OF_EXTRA_ARGUMENTS = Vehicle.getCountOfChangeableFields();
