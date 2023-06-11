@@ -10,8 +10,8 @@ public class SHA256Hashing {
 
     public static String hash(final String originalString) {
         try {
-            final MessageDigest digest = MessageDigest.getInstance(SHA_256);
-            final byte[] encodedhash = digest.digest(originalString.getBytes(StandardCharsets.UTF_8));
+            MessageDigest digest = MessageDigest.getInstance(SHA_256);
+            byte[] encodedhash = digest.digest(originalString.getBytes(StandardCharsets.UTF_8));
             return bytesToHex(encodedhash);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

@@ -22,6 +22,9 @@ import utility.*;
  * All commands implemented here.
  */
 public class BufferedDataBase {
+    private final DatabaseHandler databaseHandler;
+    private final DatabaseUserManager databaseUserManager;
+    private final DatabaseCollectionManager databaseCollectionManager;
     private final ConcurrentHashMap<Long, Vehicle> dataBase;
     private final Set<String> scriptCounter = new HashSet<>();
     private CommandInvoker commandInvoker;
@@ -31,7 +34,11 @@ public class BufferedDataBase {
     private static final String datePattern = "dd/MM/yyy - HH:mm:ss";
     private static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(datePattern);
 
-    public BufferedDataBase() {
+    public BufferedDataBase(DatabaseHandler databaseHandler, DatabaseUserManager databaseUserManager,
+                            DatabaseCollectionManager databaseCollectionManager) {
+        this.databaseHandler = databaseHandler;
+        this.databaseUserManager = databaseUserManager;
+        this.databaseCollectionManager = databaseCollectionManager;
         dataBase = FileHandler.loadDataBase();
         identifierHandler = new IdentifierHandler(dataBase);
         lastInitTime = dataBase.isEmpty() && lastInitTime == null ? null : LocalDateTime.now();
@@ -382,8 +389,8 @@ public class BufferedDataBase {
     }
 
     public boolean register(CommandArguments commandArguments) {
-
-
+        
+        
         return true;
     }
 

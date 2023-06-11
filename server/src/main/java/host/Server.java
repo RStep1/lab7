@@ -16,7 +16,7 @@ public class Server {
     private final RequestHandler requestHandler;
     private static final CommandArguments SAVE_COMMAND = 
                 new CommandArguments(SaveCommand.getName(), null, null,
-                        null, null);
+                        null, null, null);
 
     public Server(RequestHandler requestHandler, String host, int port) {
         this.requestHandler = requestHandler;
@@ -35,8 +35,10 @@ public class Server {
 
     public void run() {
         setup();
+        System.out.println("setup completed");
         try {
             while (true) {
+                System.out.println("accept()");
                 Socket client = serverSocket.accept();
                 System.out.println("New client connected: " + client.getInetAddress());
                 
