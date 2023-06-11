@@ -1,6 +1,8 @@
 package processing;
 
 import commands.InsertCommand;
+import commands.LoginCommand;
+import commands.RegisterCommand;
 import commands.UpdateCommand;
 import data.CommandArguments;
 import mods.AnswerType;
@@ -22,6 +24,13 @@ public class RequestHandler {
         MessageHolder.clearMessages(MessageType.OUTPUT_INFO);
         MessageHolder.clearMessages(MessageType.USER_ERROR);
         System.out.println(commandArguments.getUser());
+        if (commandArguments.getUser() == null && 
+            !(commandArguments.getCommandName().equals(LoginCommand.getName()) || 
+            commandArguments.getCommandName().equals(RegisterCommand.getName()))) {
+                MessageHolder.putMessage("You need to be logged in to run commands", MessageType.USER_ERROR);
+            return new ServerAnswer(MessageHolder.getOutputInfo(), MessageHolder.getUserErrors(),
+                         false, AnswerType.EXECUTION_RESPONSE);
+        }
         boolean exitStatus = invoker.execute(commandArguments);
 
         ArrayList<String> outputInfo = MessageHolder.getOutputInfo();
@@ -32,7 +41,7 @@ public class RequestHandler {
         //если это команды update или insert и при этом нет дополнительных аргументов и это не команда из скрипта,
         // то выставляем запрос на получение дополниетльных аргументов
         if (isChangingCommand(commandArguments) && isExtraArgsNull(commandArguments) && isCommandMode(commandArguments)) {
-                answerType = AnswerType.DATA_REQUEST;
+            answerType = AnswerType.DATA_REQUEST;
         }
         return new ServerAnswer(outputInfo, userErrors, exitStatus, answerType); 
     }
