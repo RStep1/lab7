@@ -6,6 +6,7 @@ import commands.LoginCommand;
 import commands.RegisterCommand;
 import commands.UpdateCommand;
 import data.CommandArguments;
+import data.User;
 import mods.AnswerType;
 import mods.ExecuteMode;
 import mods.MessageType;
@@ -16,16 +17,19 @@ import java.util.ArrayList;
 
 public class RequestHandler {
     private CommandInvoker invoker;
+    private User user;
 
     public RequestHandler(CommandInvoker invoker) {
         this.invoker = invoker;
+        
     }
 
     public ServerAnswer processRequest(CommandArguments commandArguments) {
         MessageHolder.clearMessages(MessageType.OUTPUT_INFO);
         MessageHolder.clearMessages(MessageType.USER_ERROR);
-        System.out.println(commandArguments.getUser());
-        if (commandArguments.getUser() == null && 
+        System.out.println(this.user);
+        
+        if (this.user == null && 
             !(commandArguments.getCommandName().equals(LoginCommand.getName()) || 
             commandArguments.getCommandName().equals(RegisterCommand.getName()) || 
             commandArguments.getCommandName().equals(HelpCommand.getName()))) {
@@ -33,7 +37,12 @@ public class RequestHandler {
             return new ServerAnswer(MessageHolder.getOutputInfo(), MessageHolder.getUserErrors(),
                          false, AnswerType.EXECUTION_RESPONSE);
         }
+
         boolean exitStatus = invoker.execute(commandArguments);
+
+        if (commandArguments.getCommandName().equals(LoginCommand.getName()) && exitStatus) {
+            this.user = commandArguments.getUser();
+        }
 
         ArrayList<String> outputInfo = MessageHolder.getOutputInfo();
         ArrayList<String> userErrors = MessageHolder.getUserErrors();

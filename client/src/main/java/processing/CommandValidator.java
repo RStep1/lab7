@@ -148,9 +148,7 @@ public class CommandValidator {
     public boolean validate(CommandArguments commandArguments) {
         if (commandArguments == null)
             return false;
-        if (answerType == AnswerType.EXECUTION_RESPONSE)
-            return validateArguments(commandArguments);
-        return validateExtraArguments(commandArguments);
+        return validateArguments(commandArguments);
     }
 
     private boolean validateArguments(CommandArguments commandArguments) {
@@ -172,10 +170,4 @@ public class CommandValidator {
         }
         return isCorrect;
     }
-
-    private boolean validateExtraArguments(CommandArguments commandArguments) {
-
-        return true;
-    }
-
 }

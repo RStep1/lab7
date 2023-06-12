@@ -22,7 +22,7 @@ public class Server {
         this.requestHandler = requestHandler;
         this.host = host;
         this.port = port;
-    }   
+    }
     
     private void setup() {
         try {

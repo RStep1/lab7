@@ -35,12 +35,10 @@ public class ClientManager {
         Console.println("Available commands:");
         Console.println(FileHandler.readFile(FileType.REFERENCE));
         ServerAnswer serverAnswer = null;
-        // boolean isLogin = false;
         CommandArgumentsBuilder  commandArgumentsBuilder = new CommandArgumentsBuilder(scanner, AnswerType.EXECUTION_RESPONSE);
         do {
             try {
                 if (commandArgumentsQueue.isEmpty()) { //if all commands have been processed, then we enter new ones
-                    // CommandArgumentsBuilder commandArgumentsBuilder = new CommandArgumentsBuilder(scanner, AnswerType.EXECUTION_RESPONSE);
                     commandArgumentsQueue.addAll(commandArgumentsBuilder.userEnter());
                     Console.printUserErrors();
                     MessageHolder.clearMessages(MessageType.USER_ERROR);
