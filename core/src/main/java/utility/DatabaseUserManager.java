@@ -60,12 +60,4 @@ public class DatabaseUserManager {
         }
         return user;
     }
-
-    public boolean checkPassword(User user) {
-
-        
-        return false;
-    }
-    
-    
 }

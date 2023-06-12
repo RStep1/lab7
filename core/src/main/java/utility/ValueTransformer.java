@@ -35,7 +35,7 @@ public class ValueTransformer {
 
     private static final Function<String, Long> SET_DISTANCE_TRAVELLED = Long::parseLong;
 
-    private static final Function<String, VehicleType> SET_VEHICLE_TYPE = (newType) -> {
+    public static final Function<String, VehicleType> SET_VEHICLE_TYPE = (newType) -> {
         VehicleType type = VehicleType.CAR;
         try {
             int serialNumber = Integer.parseInt(newType);

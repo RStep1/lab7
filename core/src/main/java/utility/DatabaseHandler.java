@@ -32,7 +32,7 @@ public class DatabaseHandler {
                         USERS_TABLE_PASSWORD_COLUMN + " TEXT NOT NULL)";
     public static final String CREATE_COORDINATES_TABLE = "CREATE TABLE IF NOT EXISTS " + COORDINATES_TABLE + " (" +
                         COORDINATES_TABLE_ID_COLUMN + " SERIAL PRIMARY KEY, " + 
-                        COORDINATES_TABLE_X_COLUMN + " DOUBLE PRECISION, " +
+                        COORDINATES_TABLE_X_COLUMN + " REAL, " +
                         COORDINATES_TABLE_Y_COLUMN + " DOUBLE PRECISION)";
     public static final String CREATE_VEHICLE_TABLE = "CREATE TABLE IF NOT EXISTS " + VEHICLE_TABLE + " (" + 
                         VEHICLE_TABLE_ID_COLUMN + " SERIAL PRIMARY KEY, " + 

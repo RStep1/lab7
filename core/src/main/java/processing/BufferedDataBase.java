@@ -40,7 +40,8 @@ public class BufferedDataBase {
         this.databaseHandler = databaseHandler;
         this.databaseUserManager = databaseUserManager;
         this.databaseCollectionManager = databaseCollectionManager;
-        dataBase = FileHandler.loadDataBase();
+        // dataBase = FileHandler.loadDataBase();
+        dataBase = databaseCollectionManager.loadDataBase();
         identifierHandler = new IdentifierHandler(dataBase);
         lastInitTime = dataBase.isEmpty() && lastInitTime == null ? null : LocalDateTime.now();
     }
