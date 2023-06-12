@@ -21,11 +21,31 @@ public class DatabaseHandler {
     public static final String VEHICLE_TABLE_VEHICLE_TYPE_COLUMN = "VEHICLE_TYPE";
     public static final String VEHICLE_TABLE_FUEL_TYPE_COLUMN = "FUEL_TYPE";
     public static final String VEHICLE_TABLE_COORDINATES_ID_COLUMN = "COORDINATES_ID";
-    public static final String VEHICLE_TABLE_USER_ID_COLUMN = "USER_ID";
+    public static final String VEHICLE_TABLE_USER_LOGIN_COLUMN = "USER_LOGIN";
 
     public static final String COORDINATES_TABLE_ID_COLUMN = "ID";
     public static final String COORDINATES_TABLE_X_COLUMN = "X";
     public static final String COORDINATES_TABLE_Y_COLUMN = "Y";
+
+    public static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS " + USERS_TABLE + " (" +
+                        USERS_TABLE_LOGIN_COLUMN + " TEXT PRIMARY KEY NOT NULL, " + 
+                        USERS_TABLE_PASSWORD_COLUMN + " TEXT NOT NULL)";
+    public static final String CREATE_COORDINATES_TABLE = "CREATE TABLE IF NOT EXISTS " + COORDINATES_TABLE + " (" +
+                        COORDINATES_TABLE_ID_COLUMN + " SERIAL PRIMARY KEY, " + 
+                        COORDINATES_TABLE_X_COLUMN + " DOUBLE PRECISION, " +
+                        COORDINATES_TABLE_Y_COLUMN + " DOUBLE PRECISION)";
+    public static final String CREATE_VEHICLE_TABLE = "CREATE TABLE IF NOT EXISTS " + VEHICLE_TABLE + " (" + 
+                        VEHICLE_TABLE_ID_COLUMN + " SERIAL PRIMARY KEY, " + 
+                        VEHICLE_TABLE_KEY_COLUMN + " BIGINT NOT NULL, " + 
+                        VEHICLE_TABLE_CREATION_DATE_COLUMN + " TEXT, " + 
+                        VEHICLE_TABLE_ENGINE_POWER_COLUMN + " INT, " +
+                        VEHICLE_TABLE_DISTANCE_TRAVELLED_COLUMN + " BIGINT, " +
+                        VEHICLE_TABLE_VEHICLE_TYPE_COLUMN + " TEXT, " +
+                        VEHICLE_TABLE_FUEL_TYPE_COLUMN + " TEXT, " + 
+                        VEHICLE_TABLE_COORDINATES_ID_COLUMN + " BIGINT REFERENCES " + 
+                            COORDINATES_TABLE + "(" + COORDINATES_TABLE_ID_COLUMN + "), " +
+                        VEHICLE_TABLE_USER_LOGIN_COLUMN + " TEXT REFERENCES " + 
+                            USERS_TABLE + "(" + USERS_TABLE_LOGIN_COLUMN + "))";
 
     private static final String JDBC_DRIVER = "org.postgresql.Driver";
     
@@ -58,23 +78,9 @@ public class DatabaseHandler {
 
     private void createTables() {
         try (Statement statement = connection.createStatement()) {
-            statement.execute("CREATE TABLE IF NOT EXISTS USERS (LOGIN TEXT PRIMARY KEY NOT NULL, PASSWORD TEXT NOT NULL);");
-            String createVehicle = """
-            CREATE TABLE IF NOT EXISTS VEHICLE(
-            ID SERIAL PRIMARY KEY NOT NULL,
-             KEY INT,
-             NAME TEXT,
-             CREATION_DATE TEXT,
-             X DOUBLE PRECISION,
-             Y DOUBLE PRECISION,
-             ENGINE_POWER INT,
-             DISTANCE_TRAVELLED BIGINT,
-            VEHICLE_TYPE TEXT, 
-            FUEL_TYPE TEXT, 
-            LOGIN TEXT REFERENCES USERS(LOGIN));
-            """;
-            statement.execute(createVehicle);
-            
+            statement.execute(CREATE_USERS_TABLE);
+            statement.execute(CREATE_COORDINATES_TABLE);
+            statement.execute(CREATE_VEHICLE_TABLE);
             Console.println("Tables created successfully");
         } catch (SQLException e) {
             // e.printStackTrace();
