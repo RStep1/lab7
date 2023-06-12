@@ -56,7 +56,7 @@ import utility.FileHandler;
                     new RegisterCommand(bufferedDataBase),
                     new LoginCommand(bufferedDataBase));
             RequestHandler requestHandler = new RequestHandler(invoker);
-            Server server = new Server(requestHandler, host, port);
+            Server server = new Server(invoker, host, port);
             bufferedDataBase.setCommandInvoker(invoker);
             Console.println("Server is running...");
 

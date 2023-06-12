@@ -3,6 +3,7 @@ package host;
 import commands.SaveCommand;
 import data.CommandArguments;
 import processing.ClientHandler;
+import processing.CommandInvoker;
 import processing.RequestHandler;
 
 import java.io.IOException;
@@ -13,13 +14,13 @@ public class Server {
     private final String host;
     private final int port;
     private ServerSocket serverSocket;
-    private final RequestHandler requestHandler;
+    private final CommandInvoker invoker;
     private static final CommandArguments SAVE_COMMAND = 
                 new CommandArguments(SaveCommand.getName(), null, null,
                         null, null, null);
 
-    public Server(RequestHandler requestHandler, String host, int port) {
-        this.requestHandler = requestHandler;
+    public Server(CommandInvoker invoker, String host, int port) {
+        this.invoker = invoker;
         this.host = host;
         this.port = port;
     }
@@ -42,7 +43,7 @@ public class Server {
                 Socket client = serverSocket.accept();
                 System.out.println("New client connected: " + client.getInetAddress());
                 
-                ClientHandler clientHandler = new ClientHandler(client, requestHandler);
+                ClientHandler clientHandler = new ClientHandler(client, invoker);
                 Thread clientHandlerThread = new Thread(clientHandler);
                 clientHandlerThread.start();
             }
