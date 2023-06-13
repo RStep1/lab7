@@ -68,6 +68,10 @@ public class Vehicle {
         return COUNT_OF_CHANGEABLE_FIELDS;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return String.format("""

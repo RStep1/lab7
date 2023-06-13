@@ -167,9 +167,10 @@ public class BufferedDataBase {
         }
         Vehicle vehicle = ValueHandler.getVehicle(id, creationDate, vehicleValues);
         if (addMode == AddMode.INSERT_MODE) {
-            databaseCollectionManager.insertVehicle(key, vehicle, commandArguments.getUser());
+            id = databaseCollectionManager.insertVehicle(key, vehicle, commandArguments.getUser());
+            vehicle.setId(id);
         } else {
-            databaseCollectionManager.updateVehicleById(vehicle);
+            databaseCollectionManager.updateVehicleById(vehicle, commandArguments.getUser());
         }
         dataBase.put(key, vehicle);
         MessageHolder.putCurrentCommand(commandName + " " + arguments[0], MessageType.OUTPUT_INFO);

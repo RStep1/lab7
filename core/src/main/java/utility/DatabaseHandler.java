@@ -21,8 +21,8 @@ public class DatabaseHandler {
     public static final String VEHICLE_TABLE_VEHICLE_TYPE_COLUMN = "VEHICLE_TYPE";
     public static final String VEHICLE_TABLE_FUEL_TYPE_COLUMN = "FUEL_TYPE";
     public static final String VEHICLE_TABLE_USER_LOGIN_COLUMN = "USER_LOGIN";
-    public static final String VEHICLE_TABLE_X_COLUMN = "X";
-    public static final String VEHICLE_TABLE_Y_COLUMN = "Y";
+    public static final String VEHICLE_TABLE_X_COLUMN = "X_COORD";
+    public static final String VEHICLE_TABLE_Y_COLUMN = "Y_COORD";
 
     public static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS " + USERS_TABLE + " (" +
                         USERS_TABLE_LOGIN_COLUMN + " TEXT PRIMARY KEY NOT NULL, " + 

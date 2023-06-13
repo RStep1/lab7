@@ -29,6 +29,34 @@ public class DatabaseCollectionManager {
                         DatabaseHandler.VEHICLE_TABLE_VEHICLE_TYPE_COLUMN + ", " + 
                         DatabaseHandler.VEHICLE_TABLE_FUEL_TYPE_COLUMN + ", " + 
                         DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE_VEHICLE_NAME_BY_ID = "UPDATE " + DatabaseHandler.VEHICLE_TABLE + " SET " + 
+                        DatabaseHandler.VEHICLE_TABLE_NAME_COLUMN + " = ? WHERE " + 
+                        DatabaseHandler.VEHICLE_TABLE_ID_COLUMN + " = ? AND " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
+    private static final String UPDATE_VEHICLE_X_COORDINATE_BY_ID = "UPDATE " + DatabaseHandler.VEHICLE_TABLE + " SET " + 
+                        DatabaseHandler.VEHICLE_TABLE_X_COLUMN + " = ? WHERE " + 
+                        DatabaseHandler.VEHICLE_TABLE_ID_COLUMN + " = ? AND " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
+    private static final String UPDATE_VEHICLE_Y_COORDINATE_BY_ID = "UPDATE " + DatabaseHandler.VEHICLE_TABLE + " SET " + 
+                        DatabaseHandler.VEHICLE_TABLE_Y_COLUMN + " = ? WHERE " + 
+                        DatabaseHandler.VEHICLE_TABLE_ID_COLUMN + " = ? AND " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
+    private static final String UPDATE_VEHICLE_ENGINE_POWER_BY_ID = "UPDATE " + DatabaseHandler.VEHICLE_TABLE + " SET " + 
+                        DatabaseHandler.VEHICLE_TABLE_ENGINE_POWER_COLUMN + " = ? WHERE " + 
+                        DatabaseHandler.VEHICLE_TABLE_ID_COLUMN + " = ? AND " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
+    private static final String UPDATE_VEHICLE_DISTANCE_TRAVELLED_BY_ID = "UPDATE " + DatabaseHandler.VEHICLE_TABLE + " SET " + 
+                        DatabaseHandler.VEHICLE_TABLE_DISTANCE_TRAVELLED_COLUMN + " = ? WHERE " + 
+                        DatabaseHandler.VEHICLE_TABLE_ID_COLUMN + " = ? AND " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
+    private static final String UPDATE_VEHICLE_TYPE_BY_ID = "UPDATE " + DatabaseHandler.VEHICLE_TABLE + " SET " + 
+                        DatabaseHandler.VEHICLE_TABLE_VEHICLE_TYPE_COLUMN + " = ? WHERE " + 
+                        DatabaseHandler.VEHICLE_TABLE_ID_COLUMN + " = ? AND " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
+    private static final String UPDATE_VEHICLE_FUEL_TYPE_BY_ID = "UPDATE " + DatabaseHandler.VEHICLE_TABLE + " SET " + 
+                        DatabaseHandler.VEHICLE_TABLE_FUEL_TYPE_COLUMN + " = ? WHERE " + 
+                        DatabaseHandler.VEHICLE_TABLE_ID_COLUMN + " = ? AND " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
 
     public DatabaseCollectionManager(DatabaseHandler databaseHandler) {
         this.databaseHandler = databaseHandler;
@@ -66,7 +94,8 @@ public class DatabaseCollectionManager {
     }
     
 
-    public void insertVehicle(long key, Vehicle vehicle, User user) {
+    public long insertVehicle(long key, Vehicle vehicle, User user) {
+        long id = -1;
         try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(INSERT_VEHICLE, true)) {
             databaseHandler.setCommitMode();
             databaseHandler.setSavepoint();
@@ -82,9 +111,14 @@ public class DatabaseCollectionManager {
             preparedStatement.setString(9, vehicle.getFuelType().toString());
             preparedStatement.setString(10, user.getLogin());
             if (preparedStatement.executeUpdate() == 0) {
-                System.out.println("insert vehicle = 0");
                 throw new SQLException();
             }
+
+            ResultSet keyResultSet = preparedStatement.getGeneratedKeys();
+            if (keyResultSet.next()) {
+                id = keyResultSet.getLong(1);
+            }
+
             databaseHandler.commit();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,10 +126,65 @@ public class DatabaseCollectionManager {
         } finally {
             databaseHandler.setNormalMode();
         }
+        return id;
     }
 
-    public void updateVehicleById(Vehicle vehicle) {
+    public void updateVehicleById(Vehicle vehicle, User user) {
+        try (PreparedStatement preparedUpdateName = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
+            PreparedStatement preparedUpdateX = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
+            PreparedStatement preparedUpdateY = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
+            PreparedStatement preparedUpdateEnginePower = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
+            PreparedStatement preparedUpdateDistanceTravelled = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
+            PreparedStatement preparedUpdateType = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
+            PreparedStatement preparedUpdateFuelType = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false)) {
+                databaseHandler.setCommitMode();
+                databaseHandler.setSavepoint();
+                long id = vehicle.getId();
+                String login = user.getLogin();
 
+                preparedUpdateName.setString(1, vehicle.getName());
+                preparedUpdateName.setLong(2, id);
+                preparedUpdateName.setString(3, login);
+
+                preparedUpdateName.setFloat(1, vehicle.getCoordinates().getX());
+                preparedUpdateName.setLong(2, id);
+                preparedUpdateName.setString(3, login);
+
+                preparedUpdateName.setDouble(1, vehicle.getCoordinates().getY());
+                preparedUpdateName.setLong(2, id);
+                preparedUpdateName.setString(3, login);
+
+                preparedUpdateName.setInt(1, vehicle.getEnginePower());
+                preparedUpdateName.setLong(2, id);
+                preparedUpdateName.setString(3, login);
+
+                preparedUpdateName.setLong(1, vehicle.getDistanceTravelled());
+                preparedUpdateName.setLong(2, id);
+                preparedUpdateName.setString(3, login);
+
+                preparedUpdateName.setString(1, vehicle.getType().toString());
+                preparedUpdateName.setLong(2, id);
+                preparedUpdateName.setString(3, login);
+
+                preparedUpdateName.setString(1, vehicle.getFuelType().toString());
+                preparedUpdateName.setLong(2, id);
+                preparedUpdateName.setString(3, login);
+
+                if (preparedUpdateName.executeUpdate() == 0) throw new SQLException();
+                if (preparedUpdateX.executeUpdate() == 0) throw new SQLException();
+                if (preparedUpdateY.executeUpdate() == 0) throw new SQLException();
+                if (preparedUpdateEnginePower.executeUpdate() == 0) throw new SQLException();
+                if (preparedUpdateDistanceTravelled.executeUpdate() == 0) throw new SQLException();
+                if (preparedUpdateType.executeUpdate() == 0) throw new SQLException();
+                if (preparedUpdateFuelType.executeUpdate() == 0) throw new SQLException();
+                Console.println("query UPDATE_VEHICLE_BY_ID successfully completed");
+                databaseHandler.commit();
+            } catch (SQLException e) {
+                databaseHandler.rollback();
+                Console.println("Fail to upate element on id = " + vehicle.getId() + " and login = " + user.getLogin());
+            } finally {
+                databaseHandler.setNormalMode();
+            }
         
     }
 

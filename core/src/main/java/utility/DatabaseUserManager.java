@@ -1,5 +1,6 @@
 package utility;
 
+import java.beans.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,6 +30,7 @@ public class DatabaseUserManager {
 
     public boolean insertUser(User user) {
         try (PreparedStatement preparedInserUser = databaseHandler.getPreparedStatement(INSERT_USER, false)) {
+            System.out.println(user);
             preparedInserUser.setString(1, user.getLogin());
             preparedInserUser.setString(2, SHA256Hashing.hash(user.getPasword()));
             if (preparedInserUser.executeUpdate() == 0) 
