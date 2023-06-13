@@ -298,7 +298,7 @@ public class BufferedDataBase {
                                                  String commandName, RemoveMode removeMode) {
         String[] arguments = commandArguments.getArguments();
         long userDistanceTravelled = Long.parseLong(arguments[0]);
-        databaseCollectionManager.deleteByDistanceTravelled(userDistanceTravelled, removeMode);
+        databaseCollectionManager.deleteByDistanceTravelled(userDistanceTravelled, commandArguments.getUser().getLogin(), removeMode);
         Set<Long> filteredKeys = dataBase.keySet().stream()
                 .filter(key -> dataBase.get(key).getUsername().equals(commandArguments.getUser().getLogin()))
                 .filter(key -> (removeMode == RemoveMode.REMOVE_GREATER ?

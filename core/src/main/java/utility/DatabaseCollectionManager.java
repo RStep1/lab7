@@ -73,8 +73,10 @@ public class DatabaseCollectionManager {
                         DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
 
     private static final String DELETE_VEHICLE_GREATER_THAN_DISTANCE_TRAVELLED = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ? AND " + 
                         DatabaseHandler.VEHICLE_TABLE_DISTANCE_TRAVELLED_COLUMN + " > ?";
     private static final String DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ? AND " + 
                         DatabaseHandler.VEHICLE_TABLE_DISTANCE_TRAVELLED_COLUMN + " < ?";
 
     public DatabaseCollectionManager(DatabaseHandler databaseHandler) {
@@ -241,18 +243,19 @@ public class DatabaseCollectionManager {
         }
     }
 
-    public void deleteByDistanceTravelled(long distanceTravelled, RemoveMode removeMode) {
+    public void deleteByDistanceTravelled(long distanceTravelled, String login, RemoveMode removeMode) {
         if (removeMode == RemoveMode.REMOVE_GREATER) {
-            deleteGreaterByDistanceTravelled(distanceTravelled);
+            deleteGreaterByDistanceTravelled(distanceTravelled, login);
         } else {
-            deleteLowerByDistanceTravelled(distanceTravelled);
+            deleteLowerByDistanceTravelled(distanceTravelled, login);
         }
     }
 
-    private void deleteGreaterByDistanceTravelled(long distanceTravelled) {
+    private void deleteGreaterByDistanceTravelled(long distanceTravelled, String login) {
         try (PreparedStatement preparedStatement = 
             databaseHandler.getPreparedStatement(DELETE_VEHICLE_GREATER_THAN_DISTANCE_TRAVELLED, false)) {
-            preparedStatement.setLong(1, distanceTravelled);
+            preparedStatement.setString(1, login);
+            preparedStatement.setLong(2, distanceTravelled);
             int deleted = preparedStatement.executeUpdate();
             Console.println("DELETE_VEHICLE_GREATER_THAN_DISTANCE_TRAVELLED: deleted = " + deleted);
         } catch (SQLException e) {
@@ -260,10 +263,11 @@ public class DatabaseCollectionManager {
         }
     }
 
-    private void deleteLowerByDistanceTravelled(long distanceTravelled) {
+    private void deleteLowerByDistanceTravelled(long distanceTravelled, String login) {
         try (PreparedStatement preparedStatement = 
             databaseHandler.getPreparedStatement(DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED, false)) {
-            preparedStatement.setLong(1, distanceTravelled);
+            preparedStatement.setString(1, login);
+            preparedStatement.setLong(2, distanceTravelled);
             int deleted = preparedStatement.executeUpdate();
             Console.println("DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED: deleted = " + deleted);
         } catch (SQLException e) {
