@@ -4,6 +4,7 @@ import commands.HelpCommand;
 import commands.InsertCommand;
 import commands.LoginCommand;
 import commands.RegisterCommand;
+import commands.SaveCommand;
 import commands.UpdateCommand;
 import data.CommandArguments;
 import data.User;
@@ -32,7 +33,8 @@ public class RequestHandler {
         if (this.user == null && 
             !(commandArguments.getCommandName().equals(LoginCommand.getName()) || 
             commandArguments.getCommandName().equals(RegisterCommand.getName()) || 
-            commandArguments.getCommandName().equals(HelpCommand.getName()))) {
+            commandArguments.getCommandName().equals(HelpCommand.getName()) ||
+            commandArguments.getCommandName().equals(SaveCommand.getName()))) {
                 MessageHolder.putMessage("You need to be logged in to run commands", MessageType.USER_ERROR);
             return new ServerAnswer(MessageHolder.getOutputInfo(), MessageHolder.getUserErrors(),
                          false, AnswerType.EXECUTION_RESPONSE);
