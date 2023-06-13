@@ -174,11 +174,21 @@ public class BufferedDataBase {
         }
         Vehicle vehicle = ValueHandler.getVehicle(id, creationDate, vehicleValues);
         if (addMode == AddMode.INSERT_MODE) {
-            id = databaseCollectionManager.insertVehicle(key, vehicle, commandArguments.getUser());
+            try {
+                id = databaseCollectionManager.insertVehicle(key, vehicle, commandArguments.getUser());
+            } catch (SQLException e) {
+                MessageHolder.putMessage(e.getMessage(), MessageType.USER_ERROR);
+                return false;
+            }
             vehicle.setId(id);
             vehicle.setUsername(commandArguments.getUser().getLogin());
         } else {
-            databaseCollectionManager.updateVehicleByIdAndLogin(vehicle, commandArguments.getUser());
+            try {
+                databaseCollectionManager.updateVehicleByIdAndLogin(vehicle, commandArguments.getUser());
+            } catch (SQLException e) {
+                MessageHolder.putMessage(e.getMessage(), MessageType.USER_ERROR);
+                return false;
+            }
             String dateTime = dataBase.get(key).getCreationDate();
             vehicle.setCreationDate(dateTime);
         }
@@ -206,7 +216,12 @@ public class BufferedDataBase {
             MessageHolder.putMessage("The element you want to remove does not belong to you", MessageType.USER_ERROR);
             return false;
         }
-        databaseCollectionManager.deleteByKey(key);
+        try {
+            databaseCollectionManager.deleteByKey(key);
+        } catch (SQLException e) {
+            MessageHolder.putMessage(e.getMessage(), MessageType.USER_ERROR);
+            return false;
+        }
         dataBase.remove(key);
         MessageHolder.putCurrentCommand(RemoveKeyCommand.getName() + " " + arguments[0], MessageType.OUTPUT_INFO);
         MessageHolder.putMessage(String.format(
@@ -226,7 +241,12 @@ public class BufferedDataBase {
             MessageHolder.putMessage("Collection is already empty", MessageType.OUTPUT_INFO);
         } else {
             String currentLogin = commandArguments.getUser().getLogin();
-            databaseCollectionManager.deleteByLogin(currentLogin);
+            try {
+                databaseCollectionManager.deleteByLogin(currentLogin);
+            } catch (SQLException e) {
+                MessageHolder.putMessage(e.getMessage(), MessageType.USER_ERROR);
+                return false;
+            }
             Set<Long> keySet = dataBase.keySet()
                                         .stream()
                                         .filter(key -> dataBase.get(key).getUsername().equals(currentLogin))
@@ -299,7 +319,12 @@ public class BufferedDataBase {
                                                  String commandName, RemoveMode removeMode) {
         String[] arguments = commandArguments.getArguments();
         long userDistanceTravelled = Long.parseLong(arguments[0]);
-        databaseCollectionManager.deleteByDistanceTravelled(userDistanceTravelled, commandArguments.getUser().getLogin(), removeMode);
+        try {
+            databaseCollectionManager.deleteByDistanceTravelled(userDistanceTravelled, commandArguments.getUser().getLogin(), removeMode);
+        } catch (SQLException e) {
+            MessageHolder.putMessage(e.getMessage(), MessageType.USER_ERROR);
+            return false;
+        }
         Set<Long> filteredKeys = dataBase.keySet().stream()
                 .filter(key -> dataBase.get(key).getUsername().equals(commandArguments.getUser().getLogin()))
                 .filter(key -> (removeMode == RemoveMode.REMOVE_GREATER ?

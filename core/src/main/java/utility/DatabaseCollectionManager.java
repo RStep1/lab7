@@ -124,7 +124,7 @@ public class DatabaseCollectionManager {
     }
     
 
-    public long insertVehicle(long key, Vehicle vehicle, User user) {
+    public long insertVehicle(long key, Vehicle vehicle, User user) throws SQLException {
         long id = -1;
         try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(INSERT_VEHICLE, true)) {
             databaseHandler.setCommitMode();
@@ -153,13 +153,14 @@ public class DatabaseCollectionManager {
         } catch (SQLException e) {
             e.printStackTrace();
             Console.println("Failed to execute INSERT_VEHICLE query");
+            throw new SQLException("Failed to insert element to database by key = " + key);
         } finally {
             databaseHandler.setNormalMode();
         }
         return id;
     }
 
-    public void updateVehicleByIdAndLogin(Vehicle vehicle, User user) {
+    public void updateVehicleByIdAndLogin(Vehicle vehicle, User user) throws SQLException {
         try (PreparedStatement preparedUpdateName = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
             PreparedStatement preparedUpdateX = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_X_COORDINATE_BY_ID, false);
             PreparedStatement preparedUpdateY = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_Y_COORDINATE_BY_ID, false);
@@ -211,6 +212,7 @@ public class DatabaseCollectionManager {
                 databaseHandler.rollback();
                 e.printStackTrace();
                 Console.println("Failed to upate element by id = " + vehicle.getId() + " and login = " + user.getLogin());
+                throw new SQLException("Failed to update element in database by id = " + vehicle.getId());
             } finally {
                 databaseHandler.setNormalMode();
             }
@@ -229,7 +231,7 @@ public class DatabaseCollectionManager {
         return true;
     }
 
-    public void deleteByKey(long key) {
+    public void deleteByKey(long key) throws SQLException {
         try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(DELETE_VEHICLE_BY_KEY, false)) {
             preparedStatement.setLong(1, key);
             if (!preparedStatement.executeQuery().next()) {
@@ -237,21 +239,23 @@ public class DatabaseCollectionManager {
             }
             Console.println("DELETE_VEHICLE_BY_KEY");
         } catch (SQLException e) {
-            Console.println("Faild to delete vehicle by key = " + key);
+            Console.println("Failed to delete vehicle by key = " + key);
+            throw new SQLException("Failed to delete element from database by key");
         }
     }
 
-    public void deleteByLogin(String login) {
+    public void deleteByLogin(String login) throws SQLException {
         try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(DELETE_VEHICLE_BY_LOGIN, false)) {
             preparedStatement.setString(1, login);
             int deleted = preparedStatement.executeUpdate();
             Console.println("DELETE_VEHICLE_BY_LOGIN: count of deleted = " + deleted);
         } catch (SQLException e) {
             Console.println(String.format("Failed to DELETE_VEHICLE_BY_LOGIN '%s", login));
+            throw new SQLException("Failed to clear collection");
         }
     }
 
-    public void deleteByDistanceTravelled(long distanceTravelled, String login, RemoveMode removeMode) {
+    public void deleteByDistanceTravelled(long distanceTravelled, String login, RemoveMode removeMode) throws SQLException {
         if (removeMode == RemoveMode.REMOVE_GREATER) {
             deleteGreaterByDistanceTravelled(distanceTravelled, login);
         } else {
@@ -259,7 +263,7 @@ public class DatabaseCollectionManager {
         }
     }
 
-    private void deleteGreaterByDistanceTravelled(long distanceTravelled, String login) {
+    private void deleteGreaterByDistanceTravelled(long distanceTravelled, String login) throws SQLException {
         try (PreparedStatement preparedStatement = 
             databaseHandler.getPreparedStatement(DELETE_VEHICLE_GREATER_THAN_DISTANCE_TRAVELLED, false)) {
             preparedStatement.setString(1, login);
@@ -268,10 +272,11 @@ public class DatabaseCollectionManager {
             Console.println("DELETE_VEHICLE_GREATER_THAN_DISTANCE_TRAVELLED: deleted = " + deleted);
         } catch (SQLException e) {
             Console.println("Failed to DELETE_VEHICLE_GREATER_THAN_DISTANCE_TRAVELLED");
+            throw new SQLException("Failed to delete elements greater than distance travelled from database");
         }
     }
 
-    private void deleteLowerByDistanceTravelled(long distanceTravelled, String login) {
+    private void deleteLowerByDistanceTravelled(long distanceTravelled, String login) throws SQLException {
         try (PreparedStatement preparedStatement = 
             databaseHandler.getPreparedStatement(DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED, false)) {
             preparedStatement.setString(1, login);
@@ -280,6 +285,7 @@ public class DatabaseCollectionManager {
             Console.println("DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED: deleted = " + deleted);
         } catch (SQLException e) {
             Console.println("Failed to DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED");
+            throw new SQLException("Failed to delete elements lower than distance travelled from database");
         }
     }
 
