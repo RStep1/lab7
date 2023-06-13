@@ -12,6 +12,7 @@ import data.User;
 import data.Vehicle;
 import data.VehicleType;
 import mods.MessageType;
+import mods.RemoveMode;
 import processing.Console;
 
 
@@ -71,6 +72,11 @@ public class DatabaseCollectionManager {
     private static final String DELETE_VEHICLE_BY_LOGIN = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " + 
                         DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
 
+    private static final String DELETE_VEHICLE_GREATER_THAN_DISTANCE_TRAVELLED = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " +
+                        DatabaseHandler.VEHICLE_TABLE_DISTANCE_TRAVELLED_COLUMN + " > ?";
+    private static final String DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " +
+                        DatabaseHandler.VEHICLE_TABLE_DISTANCE_TRAVELLED_COLUMN + " < ?";
+
     public DatabaseCollectionManager(DatabaseHandler databaseHandler) {
         this.databaseHandler = databaseHandler;
     }
@@ -100,10 +106,11 @@ public class DatabaseCollectionManager {
         long distanceTravelled = resultSet.getLong(DatabaseHandler.VEHICLE_TABLE_DISTANCE_TRAVELLED_COLUMN);
         String stringVehicleType = resultSet.getString(DatabaseHandler.VEHICLE_TABLE_VEHICLE_TYPE_COLUMN);
         String stringFuelType = resultSet.getString(DatabaseHandler.VEHICLE_TABLE_FUEL_TYPE_COLUMN);
+        String login = resultSet.getString(DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN);
         VehicleType vehicleType = ValueTransformer.SET_VEHICLE_TYPE.apply(stringVehicleType);
         FuelType fuelType = ValueTransformer.SET_FUEL_TYPE.apply(stringFuelType);
         Coordinates coordinates = new Coordinates(x, y);
-        return new Vehicle(id, name, coordinates, creationDate, enginePower, distanceTravelled, vehicleType, fuelType);
+        return new Vehicle(id, name, coordinates, creationDate, enginePower, distanceTravelled, vehicleType, fuelType, login);
     }
     
 
@@ -230,7 +237,37 @@ public class DatabaseCollectionManager {
             int deleted = preparedStatement.executeUpdate();
             Console.println("DELETE_VEHICLE_BY_LOGIN: count of deleted = " + deleted);
         } catch (SQLException e) {
-            Console.println(String.format("Failed to delete elements by login '%s", login));
+            Console.println(String.format("Failed to DELETE_VEHICLE_BY_LOGIN '%s", login));
+        }
+    }
+
+    public void deleteByDistanceTravelled(long distanceTravelled, RemoveMode removeMode) {
+        if (removeMode == RemoveMode.REMOVE_GREATER) {
+            deleteGreaterByDistanceTravelled(distanceTravelled);
+        } else {
+            deleteLowerByDistanceTravelled(distanceTravelled);
+        }
+    }
+
+    private void deleteGreaterByDistanceTravelled(long distanceTravelled) {
+        try (PreparedStatement preparedStatement = 
+            databaseHandler.getPreparedStatement(DELETE_VEHICLE_GREATER_THAN_DISTANCE_TRAVELLED, false)) {
+            preparedStatement.setLong(1, distanceTravelled);
+            int deleted = preparedStatement.executeUpdate();
+            Console.println("DELETE_VEHICLE_GREATER_THAN_DISTANCE_TRAVELLED: deleted = " + deleted);
+        } catch (SQLException e) {
+            Console.println("Failed to DELETE_VEHICLE_GREATER_THAN_DISTANCE_TRAVELLED");
+        }
+    }
+
+    private void deleteLowerByDistanceTravelled(long distanceTravelled) {
+        try (PreparedStatement preparedStatement = 
+            databaseHandler.getPreparedStatement(DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED, false)) {
+            preparedStatement.setLong(1, distanceTravelled);
+            int deleted = preparedStatement.executeUpdate();
+            Console.println("DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED: deleted = " + deleted);
+        } catch (SQLException e) {
+            Console.println("Failed to DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED");
         }
     }
 }

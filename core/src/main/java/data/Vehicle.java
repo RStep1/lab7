@@ -12,7 +12,7 @@ public class Vehicle {
     private long distanceTravelled;
     private VehicleType type;
     private FuelType fuelType;
-    private User user;
+    private String username;
 
     private static final int COUNT_OF_CHANGEABLE_FIELDS = 7;
 
@@ -31,6 +31,20 @@ public class Vehicle {
         this.distanceTravelled = distanceTravelled;
         this.type = type;
         this.fuelType = fuelType;
+    }
+
+    public Vehicle(long id, String name, Coordinates coordinates,
+                   String creationDate, int enginePower,
+                   long distanceTravelled, VehicleType type, FuelType fuelType, String username) {
+        this.id = id;
+        this.name = name;
+        this.coordinates = coordinates;
+        this.creationDate = creationDate;
+        this.enginePower = enginePower;
+        this.distanceTravelled = distanceTravelled;
+        this.type = type;
+        this.fuelType = fuelType;
+        this.username = username;
     }
 
     public long getId() {
@@ -69,8 +83,8 @@ public class Vehicle {
         return COUNT_OF_CHANGEABLE_FIELDS;
     }
 
-    public User getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
     public void setId(long id) {
@@ -81,8 +95,8 @@ public class Vehicle {
         this.creationDate = date;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -96,8 +110,9 @@ public class Vehicle {
                         distance travelled: %s
                         vehicle type:       %s (%s)
                         fuel type:          %s (%s)
+                        owner:              %s
                         ____________________________________________________________""",
                 id, name, coordinates, creationDate,
-                enginePower, distanceTravelled, type.getSerialNumber(), type, fuelType.getSerialNumber(), fuelType);
+                enginePower, distanceTravelled, type.getSerialNumber(), type, fuelType.getSerialNumber(), fuelType, username);
     }
 }

@@ -175,7 +175,7 @@ public class BufferedDataBase {
         if (addMode == AddMode.INSERT_MODE) {
             id = databaseCollectionManager.insertVehicle(key, vehicle, commandArguments.getUser());
             vehicle.setId(id);
-            vehicle.setUser(commandArguments.getUser());
+            vehicle.setUsername(commandArguments.getUser().getLogin());
         } else {
             databaseCollectionManager.updateVehicleByIdAndLogin(vehicle, commandArguments.getUser());
             String dateTime = dataBase.get(key).getCreationDate();
@@ -228,7 +228,7 @@ public class BufferedDataBase {
             databaseCollectionManager.deleteByLogin(currentLogin);
             Set<Long> keySet = dataBase.keySet()
                                         .stream()
-                                        .filter(key -> dataBase.get(key).getUser().getLogin().equals(currentLogin))
+                                        .filter(key -> dataBase.get(key).getUsername().equals(currentLogin))
                                         .collect(Collectors.toSet());
             for (Long key : keySet) {
                 dataBase.remove(key);
@@ -298,8 +298,9 @@ public class BufferedDataBase {
                                                  String commandName, RemoveMode removeMode) {
         String[] arguments = commandArguments.getArguments();
         long userDistanceTravelled = Long.parseLong(arguments[0]);
+        databaseCollectionManager.deleteByDistanceTravelled(userDistanceTravelled, removeMode);
         Set<Long> filteredKeys = dataBase.keySet().stream()
-                .filter(key -> dataBase.get(key).getUser() == commandArguments.getUser())
+                .filter(key -> dataBase.get(key).getUsername().equals(commandArguments.getUser().getLogin()))
                 .filter(key -> (removeMode == RemoveMode.REMOVE_GREATER ?
                         dataBase.get(key).getDistanceTravelled() > userDistanceTravelled :
                         dataBase.get(key).getDistanceTravelled() < userDistanceTravelled))
