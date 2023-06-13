@@ -76,12 +76,12 @@ public class IdentifierHandler {
             return false;
         if (hasLeadingZeros(id, "Id", commandName))
             return false;
-        if (id.length() != ID_LENGTH) {
-            MessageHolder.putCurrentCommand(commandName, MessageType.USER_ERROR);
-            MessageHolder.putMessage(String.format(
-                    "Invalid id length: %s, expected %s", id.length(), ID_LENGTH), MessageType.USER_ERROR);
-            return false;
-        }
+        // if (id.length() != ID_LENGTH) {
+        //     MessageHolder.putCurrentCommand(commandName, MessageType.USER_ERROR);
+        //     MessageHolder.putMessage(String.format(
+        //             "Invalid id length: %s, expected %s", id.length(), ID_LENGTH), MessageType.USER_ERROR);
+        //     return false;
+        // }
         return true;
     }
 
