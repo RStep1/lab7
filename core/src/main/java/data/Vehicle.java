@@ -72,6 +72,10 @@ public class Vehicle {
         this.id = id;
     }
 
+    public void setCreationDate(String date) {
+        this.creationDate = date;
+    }
+
     @Override
     public String toString() {
         return String.format("""

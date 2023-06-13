@@ -5,11 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
+import data.CommandArguments;
 import data.Coordinates;
 import data.FuelType;
 import data.User;
 import data.Vehicle;
 import data.VehicleType;
+import mods.MessageType;
 import processing.Console;
 
 
@@ -56,6 +58,11 @@ public class DatabaseCollectionManager {
     private static final String UPDATE_VEHICLE_FUEL_TYPE_BY_ID = "UPDATE " + DatabaseHandler.VEHICLE_TABLE + " SET " + 
                         DatabaseHandler.VEHICLE_TABLE_FUEL_TYPE_COLUMN + " = ? WHERE " + 
                         DatabaseHandler.VEHICLE_TABLE_ID_COLUMN + " = ? AND " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
+
+    private static final String SELECT_VEHICLE_BY_ID_AND_LOGIN = "SELECT * FROM " +
+                        DatabaseHandler.VEHICLE_TABLE + " WHERE " +
+                        DatabaseHandler.VEHICLE_TABLE_ID_COLUMN + " = ? AND " + 
                         DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
 
     public DatabaseCollectionManager(DatabaseHandler databaseHandler) {
@@ -122,21 +129,21 @@ public class DatabaseCollectionManager {
             databaseHandler.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            Console.println("Fail");
+            Console.println("Failed to execute INSERT_VEHICLE query");
         } finally {
             databaseHandler.setNormalMode();
         }
         return id;
     }
 
-    public void updateVehicleById(Vehicle vehicle, User user) {
+    public void updateVehicleByIdAndLogin(Vehicle vehicle, User user) {
         try (PreparedStatement preparedUpdateName = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
-            PreparedStatement preparedUpdateX = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
-            PreparedStatement preparedUpdateY = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
-            PreparedStatement preparedUpdateEnginePower = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
-            PreparedStatement preparedUpdateDistanceTravelled = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
-            PreparedStatement preparedUpdateType = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false);
-            PreparedStatement preparedUpdateFuelType = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_NAME_BY_ID, false)) {
+            PreparedStatement preparedUpdateX = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_X_COORDINATE_BY_ID, false);
+            PreparedStatement preparedUpdateY = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_Y_COORDINATE_BY_ID, false);
+            PreparedStatement preparedUpdateEnginePower = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_ENGINE_POWER_BY_ID, false);
+            PreparedStatement preparedUpdateDistanceTravelled = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_DISTANCE_TRAVELLED_BY_ID, false);
+            PreparedStatement preparedUpdateType = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_TYPE_BY_ID, false);
+            PreparedStatement preparedUpdateFuelType = databaseHandler.getPreparedStatement(UPDATE_VEHICLE_FUEL_TYPE_BY_ID, false)) {
                 databaseHandler.setCommitMode();
                 databaseHandler.setSavepoint();
                 long id = vehicle.getId();
@@ -170,23 +177,34 @@ public class DatabaseCollectionManager {
                 preparedUpdateFuelType.setLong(2, id);
                 preparedUpdateFuelType.setString(3, login);
 
-                if (preparedUpdateName.executeUpdate() == 0) throw new SQLException();
-                if (preparedUpdateX.executeUpdate() == 0) throw new SQLException();
-                if (preparedUpdateY.executeUpdate() == 0) throw new SQLException();
-                if (preparedUpdateEnginePower.executeUpdate() == 0) throw new SQLException();
-                if (preparedUpdateDistanceTravelled.executeUpdate() == 0) throw new SQLException();
-                if (preparedUpdateType.executeUpdate() == 0) throw new SQLException();
-                if (preparedUpdateFuelType.executeUpdate() == 0) throw new SQLException();
-                Console.println("query UPDATE_VEHICLE_BY_ID successfully completed");
+                if (preparedUpdateName.executeUpdate() == 0 || preparedUpdateX.executeUpdate() == 0 || preparedUpdateY.executeUpdate() == 0 ||
+                    preparedUpdateEnginePower.executeUpdate() == 0 || preparedUpdateDistanceTravelled.executeUpdate() == 0 ||
+                    preparedUpdateType.executeUpdate() == 0 || preparedUpdateFuelType.executeUpdate() == 0)
+                     throw new SQLException();
+                
                 databaseHandler.commit();
+                Console.println("query UPDATE_VEHICLE_BY_ID successfully completed");
             } catch (SQLException e) {
                 databaseHandler.rollback();
                 e.printStackTrace();
-                Console.println("Fail to upate element on id = " + vehicle.getId() + " and login = " + user.getLogin());
+                Console.println("Failed to upate element by id = " + vehicle.getId() + " and login = " + user.getLogin());
             } finally {
                 databaseHandler.setNormalMode();
             }
-        
+    }
+
+    public boolean hasVehicleWithIdAndLogin(long id, String login) {
+        try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(SELECT_VEHICLE_BY_ID_AND_LOGIN, false)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.setString(2, login);
+            System.out.println("checking");
+            if (!preparedStatement.executeQuery().next()) {
+                return false;
+            }
+        } catch (SQLException e) {
+            Console.println("Failed to execute SELECT_VEHICLE_BY_ID_AND_LOGIN query");
+        }
+        return true;
     }
 
     public void deleteVehicleByID(long id) {

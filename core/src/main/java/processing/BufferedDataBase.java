@@ -125,8 +125,14 @@ public class BufferedDataBase {
      * @return Command exit status.
      */
     public boolean update(CommandArguments commandArguments) {
-        if (!identifierHandler.hasElementWithId(Long.parseLong(commandArguments.getArguments()[0]))) {
+        long id = Long.parseLong(commandArguments.getArguments()[0]);
+        User user = commandArguments.getUser();
+        if (!identifierHandler.hasElementWithId(id)) {
             MessageHolder.putMessage("No such element with this id", MessageType.USER_ERROR);
+            return false;
+        }
+        if (!databaseCollectionManager.hasVehicleWithIdAndLogin(id, user.getLogin())) {
+            MessageHolder.putMessage("The element you want to update does not belong to you", MessageType.USER_ERROR);
             return false;
         }
         if (commandArguments.getExtraArguments() == null)
@@ -149,7 +155,6 @@ public class BufferedDataBase {
         long key = 0, id = -1;
         if (addMode == AddMode.INSERT_MODE) {
             key = Long.parseLong(arguments[0]);
-            // id = identifierHandler.generateId();
         } else {
             id = Long.parseLong(arguments[0]);
             key = identifierHandler.getKeyById(id);
@@ -170,7 +175,9 @@ public class BufferedDataBase {
             id = databaseCollectionManager.insertVehicle(key, vehicle, commandArguments.getUser());
             vehicle.setId(id);
         } else {
-            databaseCollectionManager.updateVehicleById(vehicle, commandArguments.getUser());
+            databaseCollectionManager.updateVehicleByIdAndLogin(vehicle, commandArguments.getUser());
+            String dateTime = dataBase.get(key).getCreationDate();
+            vehicle.setCreationDate(dateTime);
         }
         dataBase.put(key, vehicle);
         MessageHolder.putCurrentCommand(commandName + " " + arguments[0], MessageType.OUTPUT_INFO);
