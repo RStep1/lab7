@@ -146,29 +146,29 @@ public class DatabaseCollectionManager {
                 preparedUpdateName.setLong(2, id);
                 preparedUpdateName.setString(3, login);
 
-                preparedUpdateName.setFloat(1, vehicle.getCoordinates().getX());
-                preparedUpdateName.setLong(2, id);
-                preparedUpdateName.setString(3, login);
+                preparedUpdateX.setFloat(1, vehicle.getCoordinates().getX());
+                preparedUpdateX.setLong(2, id);
+                preparedUpdateX.setString(3, login);
 
-                preparedUpdateName.setDouble(1, vehicle.getCoordinates().getY());
-                preparedUpdateName.setLong(2, id);
-                preparedUpdateName.setString(3, login);
+                preparedUpdateY.setDouble(1, vehicle.getCoordinates().getY());
+                preparedUpdateY.setLong(2, id);
+                preparedUpdateY.setString(3, login);
 
-                preparedUpdateName.setInt(1, vehicle.getEnginePower());
-                preparedUpdateName.setLong(2, id);
-                preparedUpdateName.setString(3, login);
+                preparedUpdateEnginePower.setInt(1, vehicle.getEnginePower());
+                preparedUpdateEnginePower.setLong(2, id);
+                preparedUpdateEnginePower.setString(3, login);
 
-                preparedUpdateName.setLong(1, vehicle.getDistanceTravelled());
-                preparedUpdateName.setLong(2, id);
-                preparedUpdateName.setString(3, login);
+                preparedUpdateDistanceTravelled.setLong(1, vehicle.getDistanceTravelled());
+                preparedUpdateDistanceTravelled.setLong(2, id);
+                preparedUpdateDistanceTravelled.setString(3, login);
 
-                preparedUpdateName.setString(1, vehicle.getType().toString());
-                preparedUpdateName.setLong(2, id);
-                preparedUpdateName.setString(3, login);
+                preparedUpdateType.setString(1, vehicle.getType().toString());
+                preparedUpdateType.setLong(2, id);
+                preparedUpdateType.setString(3, login);
 
-                preparedUpdateName.setString(1, vehicle.getFuelType().toString());
-                preparedUpdateName.setLong(2, id);
-                preparedUpdateName.setString(3, login);
+                preparedUpdateFuelType.setString(1, vehicle.getFuelType().toString());
+                preparedUpdateFuelType.setLong(2, id);
+                preparedUpdateFuelType.setString(3, login);
 
                 if (preparedUpdateName.executeUpdate() == 0) throw new SQLException();
                 if (preparedUpdateX.executeUpdate() == 0) throw new SQLException();
@@ -181,6 +181,7 @@ public class DatabaseCollectionManager {
                 databaseHandler.commit();
             } catch (SQLException e) {
                 databaseHandler.rollback();
+                e.printStackTrace();
                 Console.println("Fail to upate element on id = " + vehicle.getId() + " and login = " + user.getLogin());
             } finally {
                 databaseHandler.setNormalMode();
