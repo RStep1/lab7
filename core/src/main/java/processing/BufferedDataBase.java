@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import commands.*;
@@ -223,7 +224,15 @@ public class BufferedDataBase {
         if (dataBase.isEmpty()) {
             MessageHolder.putMessage("Collection is already empty", MessageType.OUTPUT_INFO);
         } else {
-            dataBase.clear();
+            String currentLogin = commandArguments.getUser().getLogin();
+            databaseCollectionManager.deleteByLogin(currentLogin);
+            Set<Long> keySet = dataBase.keySet()
+                                        .stream()
+                                        .filter(key -> dataBase.get(key).getUser().getLogin().equals(currentLogin))
+                                        .collect(Collectors.toSet());
+            for (Long key : keySet) {
+                dataBase.remove(key);
+            }
             MessageHolder.putMessage("Collection successfully cleared", MessageType.OUTPUT_INFO);
         }
         return true;

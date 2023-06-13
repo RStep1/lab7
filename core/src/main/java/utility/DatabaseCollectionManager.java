@@ -68,6 +68,9 @@ public class DatabaseCollectionManager {
     private static final String DELETE_VEHICLE_BY_KEY = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " + 
                         DatabaseHandler.VEHICLE_TABLE_KEY_COLUMN + " = ?";
 
+    private static final String DELETE_VEHICLE_BY_LOGIN = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " + 
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
+
     public DatabaseCollectionManager(DatabaseHandler databaseHandler) {
         this.databaseHandler = databaseHandler;
     }
@@ -212,13 +215,22 @@ public class DatabaseCollectionManager {
     public void deleteByKey(long key) {
         try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(DELETE_VEHICLE_BY_KEY, false)) {
             preparedStatement.setLong(1, key);
-            if (preparedStatement.executeQuery().next()) {
+            if (!preparedStatement.executeQuery().next()) {
                 throw new SQLException();
             }
             Console.println("DELETE_VEHICLE_BY_KEY");
         } catch (SQLException e) {
             Console.println("Faild to delete vehicle by key = " + key);
         }
+    }
 
+    public void deleteByLogin(String login) {
+        try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(DELETE_VEHICLE_BY_LOGIN, false)) {
+            preparedStatement.setString(1, login);
+            int deleted = preparedStatement.executeUpdate();
+            Console.println("DELETE_VEHICLE_BY_LOGIN: count of deleted = " + deleted);
+        } catch (SQLException e) {
+            Console.println(String.format("Failed to delete elements by login '%s", login));
+        }
     }
 }
