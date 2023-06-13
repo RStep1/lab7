@@ -174,6 +174,7 @@ public class BufferedDataBase {
         if (addMode == AddMode.INSERT_MODE) {
             id = databaseCollectionManager.insertVehicle(key, vehicle, commandArguments.getUser());
             vehicle.setId(id);
+            vehicle.setUser(commandArguments.getUser());
         } else {
             databaseCollectionManager.updateVehicleByIdAndLogin(vehicle, commandArguments.getUser());
             String dateTime = dataBase.get(key).getCreationDate();
@@ -197,6 +198,13 @@ public class BufferedDataBase {
                 RemoveKeyCommand.getName() + " " + arguments[0]))
             return false;
         long key = Long.parseLong(arguments[0]);
+        Vehicle vehicle = dataBase.get(key);
+        long id = vehicle.getId();
+        if (!databaseCollectionManager.hasVehicleWithIdAndLogin(id, commandArguments.getUser().getLogin())) {
+            MessageHolder.putMessage("The element you want to remove does not belong to you", MessageType.USER_ERROR);
+            return false;
+        }
+        databaseCollectionManager.deleteByKey(key);
         dataBase.remove(key);
         MessageHolder.putCurrentCommand(RemoveKeyCommand.getName() + " " + arguments[0], MessageType.OUTPUT_INFO);
         MessageHolder.putMessage(String.format(
@@ -282,6 +290,7 @@ public class BufferedDataBase {
         String[] arguments = commandArguments.getArguments();
         long userDistanceTravelled = Long.parseLong(arguments[0]);
         Set<Long> filteredKeys = dataBase.keySet().stream()
+                .filter(key -> dataBase.get(key).getUser() == commandArguments.getUser())
                 .filter(key -> (removeMode == RemoveMode.REMOVE_GREATER ?
                         dataBase.get(key).getDistanceTravelled() > userDistanceTravelled :
                         dataBase.get(key).getDistanceTravelled() < userDistanceTravelled))

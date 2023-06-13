@@ -12,6 +12,7 @@ public class Vehicle {
     private long distanceTravelled;
     private VehicleType type;
     private FuelType fuelType;
+    private User user;
 
     private static final int COUNT_OF_CHANGEABLE_FIELDS = 7;
 
@@ -68,12 +69,20 @@ public class Vehicle {
         return COUNT_OF_CHANGEABLE_FIELDS;
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
 
     public void setCreationDate(String date) {
         this.creationDate = date;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

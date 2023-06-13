@@ -65,6 +65,9 @@ public class DatabaseCollectionManager {
                         DatabaseHandler.VEHICLE_TABLE_ID_COLUMN + " = ? AND " + 
                         DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ?";
 
+    private static final String DELETE_VEHICLE_BY_KEY = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " + 
+                        DatabaseHandler.VEHICLE_TABLE_KEY_COLUMN + " = ?";
+
     public DatabaseCollectionManager(DatabaseHandler databaseHandler) {
         this.databaseHandler = databaseHandler;
     }
@@ -197,7 +200,6 @@ public class DatabaseCollectionManager {
         try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(SELECT_VEHICLE_BY_ID_AND_LOGIN, false)) {
             preparedStatement.setLong(1, id);
             preparedStatement.setString(2, login);
-            System.out.println("checking");
             if (!preparedStatement.executeQuery().next()) {
                 return false;
             }
@@ -207,7 +209,16 @@ public class DatabaseCollectionManager {
         return true;
     }
 
-    public void deleteVehicleByID(long id) {
+    public void deleteByKey(long key) {
+        try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(DELETE_VEHICLE_BY_KEY, false)) {
+            preparedStatement.setLong(1, key);
+            if (preparedStatement.executeQuery().next()) {
+                throw new SQLException();
+            }
+            Console.println("DELETE_VEHICLE_BY_KEY");
+        } catch (SQLException e) {
+            Console.println("Faild to delete vehicle by key = " + key);
+        }
 
     }
 }
