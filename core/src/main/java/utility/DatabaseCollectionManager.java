@@ -83,6 +83,10 @@ public class DatabaseCollectionManager {
                         DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ? AND " + 
                         DatabaseHandler.VEHICLE_TABLE_KEY_COLUMN + " > ?";
 
+    private static final String DELETE_VEHICLE_BY_ENGINE_POWER = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ? AND " + 
+                        DatabaseHandler.VEHICLE_TABLE_ENGINE_POWER_COLUMN + " = ?";
+
     public DatabaseCollectionManager(DatabaseHandler databaseHandler) {
         this.databaseHandler = databaseHandler;
     }
@@ -288,6 +292,18 @@ public class DatabaseCollectionManager {
         } catch (SQLException e) {
             Console.println("Failed to DELETE_VEHICLE_GREATER_THAN_KEY query");
             throw new SQLException("Failed to delete elements greater than key from database");
+        }
+    }
+
+    public void deleteByEnginePower(int enginePower, String login) throws SQLException {
+        try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(DELETE_VEHICLE_BY_ENGINE_POWER, false)) {
+            preparedStatement.setString(1, login);
+            preparedStatement.setInt(2, enginePower);
+            int deleted = preparedStatement.executeUpdate();
+            Console.println("DELETE_VEHICLE_BY_ENGINE_POWER: deleted = " + deleted);
+        } catch (SQLException e) {
+            Console.println("Failed to DELETE_VEHICLE_BY_ENGINE_POWER query");
+            throw new SQLException("Failed to delete elements by engine power = " + enginePower);
         }
     }
 }

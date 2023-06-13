@@ -365,8 +365,15 @@ public class BufferedDataBase {
     public boolean removeAllByEnginePower(CommandArguments commandArguments) {
         String[] arguments = commandArguments.getArguments();
         int userEnginePower = Integer.parseInt(arguments[0]);
+        try {
+            databaseCollectionManager.deleteByEnginePower(userEnginePower, commandArguments.getUser().getLogin());
+        } catch (SQLException e) {
+            MessageHolder.putMessage(e.getMessage(), MessageType.USER_ERROR);
+            return false;
+        }
         int countOfRemoved = 0;
         Set<Long> filteredKeys = dataBase.keySet().stream()
+                .filter(key -> dataBase.get(key).getUsername().equals(commandArguments.getUser().getLogin()))
                 .filter(key -> dataBase.get(key).getEnginePower() == userEnginePower)
                 .collect(Collectors.toSet());
         for (Long key : filteredKeys) {
