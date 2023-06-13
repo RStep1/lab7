@@ -20,30 +20,24 @@ public class DatabaseHandler {
     public static final String VEHICLE_TABLE_DISTANCE_TRAVELLED_COLUMN = "DISTANCE_TRAVELLED";
     public static final String VEHICLE_TABLE_VEHICLE_TYPE_COLUMN = "VEHICLE_TYPE";
     public static final String VEHICLE_TABLE_FUEL_TYPE_COLUMN = "FUEL_TYPE";
-    public static final String VEHICLE_TABLE_COORDINATES_ID_COLUMN = "COORDINATES_ID";
     public static final String VEHICLE_TABLE_USER_LOGIN_COLUMN = "USER_LOGIN";
-
-    public static final String COORDINATES_TABLE_ID_COLUMN = "ID";
-    public static final String COORDINATES_TABLE_X_COLUMN = "X";
-    public static final String COORDINATES_TABLE_Y_COLUMN = "Y";
+    public static final String VEHICLE_TABLE_X_COLUMN = "X";
+    public static final String VEHICLE_TABLE_Y_COLUMN = "Y";
 
     public static final String CREATE_USERS_TABLE = "CREATE TABLE IF NOT EXISTS " + USERS_TABLE + " (" +
                         USERS_TABLE_LOGIN_COLUMN + " TEXT PRIMARY KEY NOT NULL, " + 
                         USERS_TABLE_PASSWORD_COLUMN + " TEXT NOT NULL)";
-    public static final String CREATE_COORDINATES_TABLE = "CREATE TABLE IF NOT EXISTS " + COORDINATES_TABLE + " (" +
-                        COORDINATES_TABLE_ID_COLUMN + " SERIAL PRIMARY KEY, " + 
-                        COORDINATES_TABLE_X_COLUMN + " REAL, " +
-                        COORDINATES_TABLE_Y_COLUMN + " DOUBLE PRECISION)";
     public static final String CREATE_VEHICLE_TABLE = "CREATE TABLE IF NOT EXISTS " + VEHICLE_TABLE + " (" + 
                         VEHICLE_TABLE_ID_COLUMN + " SERIAL PRIMARY KEY, " + 
                         VEHICLE_TABLE_KEY_COLUMN + " BIGINT NOT NULL, " + 
+                        VEHICLE_TABLE_NAME_COLUMN + " TEXT, " +
+                        VEHICLE_TABLE_X_COLUMN + " REAL, " +
+                        VEHICLE_TABLE_Y_COLUMN + " DOUBLE PRECISION, " + 
                         VEHICLE_TABLE_CREATION_DATE_COLUMN + " TEXT, " + 
                         VEHICLE_TABLE_ENGINE_POWER_COLUMN + " INT, " +
                         VEHICLE_TABLE_DISTANCE_TRAVELLED_COLUMN + " BIGINT, " +
                         VEHICLE_TABLE_VEHICLE_TYPE_COLUMN + " TEXT, " +
                         VEHICLE_TABLE_FUEL_TYPE_COLUMN + " TEXT, " + 
-                        VEHICLE_TABLE_COORDINATES_ID_COLUMN + " BIGINT REFERENCES " + 
-                            COORDINATES_TABLE + "(" + COORDINATES_TABLE_ID_COLUMN + "), " +
                         VEHICLE_TABLE_USER_LOGIN_COLUMN + " TEXT REFERENCES " + 
                             USERS_TABLE + "(" + USERS_TABLE_LOGIN_COLUMN + "))";
 
@@ -79,7 +73,6 @@ public class DatabaseHandler {
     private void createTables() {
         try (Statement statement = connection.createStatement()) {
             statement.execute(CREATE_USERS_TABLE);
-            statement.execute(CREATE_COORDINATES_TABLE);
             statement.execute(CREATE_VEHICLE_TABLE);
             Console.println("Tables created successfully");
         } catch (SQLException e) {
@@ -134,7 +127,7 @@ public class DatabaseHandler {
             if (connection == null) throw new SQLException();
             connection.setAutoCommit(false);
         } catch (SQLException exception) {
-            Console.println("Произошла ошибка при установлении режима транзакции базы данных!");
+            System.out.println("Произошла ошибка при установлении режима транзакции базы данных!");
         }
     }
 
@@ -143,7 +136,7 @@ public class DatabaseHandler {
             if (connection == null) throw new SQLException();
             connection.setAutoCommit(true);
         } catch (SQLException exception) {
-            Console.println("Произошла ошибка при установлении режима транзакции базы данных!");
+            System.out.println("Произошла ошибка при установлении режима транзакции базы данных!");
         }
     }
 
@@ -152,7 +145,7 @@ public class DatabaseHandler {
             if (connection == null) throw new SQLException();
             connection.commit();
         } catch (SQLException exception) {
-            Console.println("Произошла ошибка при подтверждении нового состояния базы данных!");
+            System.out.println("Произошла ошибка при подтверждении нового состояния базы данных!");
         }
     }
 
@@ -170,7 +163,7 @@ public class DatabaseHandler {
             if (connection == null) throw new SQLException();
             connection.setSavepoint();
         } catch (SQLException exception) {
-            Console.println("Произошла ошибка при сохранении состояния базы данных!");
+            System.out.println("Произошла ошибка при сохранении состояния базы данных!");
         }
     }
 

@@ -146,10 +146,10 @@ public class BufferedDataBase {
         String commandName = commandArguments.getCommandName();
         ExecuteMode executeMode = commandArguments.getExecuteMode();
         java.time.ZonedDateTime creationDate = ZonedDateTime.now();
-        long key = 0, id = 0;
+        long key = 0, id = -1;
         if (addMode == AddMode.INSERT_MODE) {
             key = Long.parseLong(arguments[0]);
-            id = identifierHandler.generateId();
+            // id = identifierHandler.generateId();
         } else {
             id = Long.parseLong(arguments[0]);
             key = identifierHandler.getKeyById(id);
@@ -166,6 +166,11 @@ public class BufferedDataBase {
             return false;
         }
         Vehicle vehicle = ValueHandler.getVehicle(id, creationDate, vehicleValues);
+        if (addMode == AddMode.INSERT_MODE) {
+            databaseCollectionManager.insertVehicle(key, vehicle, commandArguments.getUser());
+        } else {
+            databaseCollectionManager.updateVehicleById(vehicle);
+        }
         dataBase.put(key, vehicle);
         MessageHolder.putCurrentCommand(commandName + " " + arguments[0], MessageType.OUTPUT_INFO);
         MessageHolder.putMessage("Element was successfully " + addMode.getResultMessage(), MessageType.OUTPUT_INFO);
@@ -396,12 +401,13 @@ public class BufferedDataBase {
             MessageHolder.putMessage("User with such login already exists", MessageType.USER_ERROR);
             return false;
         }
-        if (!databaseUserManager.insertUser(user)) {
+        boolean exitStatus = databaseUserManager.insertUser(user);
+        if (!exitStatus) {
             MessageHolder.putMessage("", MessageType.USER_ERROR);
             return false;
         }
         MessageHolder.putMessage(String.format("User '%s' successfully registered", user.getLogin()), MessageType.OUTPUT_INFO);
-        return databaseUserManager.insertUser(user);
+        return true;
     }
 
     public boolean login(CommandArguments commandArguments) {
