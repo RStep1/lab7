@@ -6,6 +6,7 @@ import data.User;
 import data.Vehicle;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -332,8 +333,16 @@ public class BufferedDataBase {
     public boolean removeGreaterKey(CommandArguments commandArguments) {
         String[] arguments = commandArguments.getArguments();
         long userKey = Long.parseLong(arguments[0]);
+        try {
+            databaseCollectionManager.deleteByGreaterKey(userKey, commandArguments.getUser().getLogin());
+        } catch (SQLException e) {
+            MessageHolder.putMessage(e.getMessage(), MessageType.USER_ERROR);
+            return false;
+        }
         int countOfRemovedKeys = 0;
-        Set<Long> filteredKeys = dataBase.keySet().stream().filter(key -> key > userKey).collect(Collectors.toSet());
+        Set<Long> filteredKeys = dataBase.keySet().stream()
+                                .filter(key -> dataBase.get(key).getUsername().equals(commandArguments.getUser().getLogin()))
+                                .filter(key -> key > userKey).collect(Collectors.toSet());
         for (Long key : filteredKeys) {
             dataBase.remove(key);
             countOfRemovedKeys++;

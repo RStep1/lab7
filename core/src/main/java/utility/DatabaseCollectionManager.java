@@ -78,6 +78,10 @@ public class DatabaseCollectionManager {
     private static final String DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " +
                         DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ? AND " + 
                         DatabaseHandler.VEHICLE_TABLE_DISTANCE_TRAVELLED_COLUMN + " < ?";
+    
+    private static final String DELETE_VEHICLE_GREATER_THAN_KEY = "DELETE FROM " + DatabaseHandler.VEHICLE_TABLE + " WHERE " +
+                        DatabaseHandler.VEHICLE_TABLE_USER_LOGIN_COLUMN + " = ? AND " + 
+                        DatabaseHandler.VEHICLE_TABLE_KEY_COLUMN + " > ?";
 
     public DatabaseCollectionManager(DatabaseHandler databaseHandler) {
         this.databaseHandler = databaseHandler;
@@ -272,6 +276,18 @@ public class DatabaseCollectionManager {
             Console.println("DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED: deleted = " + deleted);
         } catch (SQLException e) {
             Console.println("Failed to DELETE_VEHICLE_LOWER_THAN_DISTANCE_TRAVELLED");
+        }
+    }
+
+    public void deleteByGreaterKey(long key, String login) throws SQLException {
+        try (PreparedStatement preparedStatement = databaseHandler.getPreparedStatement(DELETE_VEHICLE_GREATER_THAN_KEY, false)) {
+            preparedStatement.setString(1, login);
+            preparedStatement.setLong(2, key);
+            int deleted = preparedStatement.executeUpdate();
+            Console.println("DELETE_VEHICLE_GREATER_THAN_KEY: deleted = " + deleted);
+        } catch (SQLException e) {
+            Console.println("Failed to DELETE_VEHICLE_GREATER_THAN_KEY query");
+            throw new SQLException("Failed to delete elements greater than key from database");
         }
     }
 }
