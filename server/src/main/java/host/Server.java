@@ -4,14 +4,12 @@ import commands.SaveCommand;
 import data.CommandArguments;
 import processing.ClientHandler;
 import processing.CommandInvoker;
-import processing.RequestHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    private final String host;
     private final int port;
     private ServerSocket serverSocket;
     private final CommandInvoker invoker;
@@ -19,9 +17,8 @@ public class Server {
                 new CommandArguments(SaveCommand.getName(), null, null,
                         null, null, null);
 
-    public Server(CommandInvoker invoker, String host, int port) {
+    public Server(CommandInvoker invoker, int port) {
         this.invoker = invoker;
-        this.host = host;
         this.port = port;
     }
     

@@ -5,7 +5,6 @@ import data.FuelType;
 import data.User;
 import data.Vehicle;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
@@ -13,7 +12,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import commands.*;

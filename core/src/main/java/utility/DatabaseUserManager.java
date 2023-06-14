@@ -1,6 +1,5 @@
 package utility;
 
-import java.beans.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,10 +16,6 @@ public class DatabaseUserManager {
                         DatabaseHandler.USERS_TABLE_PASSWORD_COLUMN + ") VALUES (?, ?)";
     private static final String SELECT_USER_BY_LOGIN = "SELECT * FROM " + DatabaseHandler.USERS_TABLE + 
                         " WHERE " + DatabaseHandler.USERS_TABLE_LOGIN_COLUMN + " = ?";
-    // private static final String 
-    // private static final String 
-    // private static final String 
-    // private static final String 
     
     public DatabaseUserManager(DatabaseHandler databaseHandler) {
         this.databaseHandler = databaseHandler;

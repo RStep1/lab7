@@ -5,13 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
-import data.CommandArguments;
 import data.Coordinates;
 import data.FuelType;
 import data.User;
 import data.Vehicle;
 import data.VehicleType;
-import mods.MessageType;
 import mods.RemoveMode;
 import processing.Console;
 

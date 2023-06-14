@@ -29,7 +29,7 @@ public class Client {
             bufferedInputStream.close();
             bufferedOutputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 

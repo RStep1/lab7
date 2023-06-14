@@ -16,7 +16,6 @@ import user.Client;
 import utility.FileHandler;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 public class CommandArgumentsBuilder {
